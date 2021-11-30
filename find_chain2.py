@@ -22,59 +22,53 @@ def get_neighbors(file):
         
         for j,row in data.iterrows():
             current_j = data.iloc[:, 0][j]
-            if current_j != current_i: #skip if the same alpha carbon
+            if current_j != current_i: #skip if the same
                 parsed_row = row[1].split(' ')
                 x2 = float(parsed_row[0])
                 y2 = float(parsed_row[1])
                 z2 = float(parsed_row[2])
 
-                # calculate distance between alpha carbons
+                # calculate distance
                 distance = sqrt(pow((x2 - x1), 2) + pow((y2 - y1), 2) + pow((z2 - z1), 2))
 
-                if(distance < threshold and len(neighbors) < 4):
+                if(distance > 3.6 and distance < threshold):
                     neighbors.append(current_j)
 
         closest_pairs[current_i] = neighbors
     return closest_pairs
 
-
-def get_start(pairs):
-    start = 1
-
-    for pair in pairs:
-        if(len(pairs[pair]) == 1):
-            start = pair
-            break
-    return start
-    
-def dynamic(pairs,prev,next):
-
-
-    return dynamic()
-
+def dynamaic(pairs,node,chain):
+    allChains = []
+    if(len(pairs[node]) > 0):
+        next_nodes = pairs[node]
+        chain.append(node)
+        for next in next_nodes:
+            if(node in pairs[next]):
+                pairs[next].remove(node) #remove the previous value
+                return dynamaic(pairs,next,chain)
+    else:
+        return chain
 
 def print_chain(pairs):
     length = len(pairs)
-    chain = []
+
+    startnodes = []
+
     #find the beginning/end of the chain
-    start = get_start(pairs)
+    for pair in pairs:
+        if(len(pairs[pair]) == 1):
+            startnodes.append(pair)
  
-    prev = start
-    print(prev)
+
+    for node in startnodes:
+        res = dynamaic(pairs,node,[])
+        if(isinstance(res,list)):
+            print(res)
+        
 
     #loop though and print the chain
-    for p in range(1,length):
-        #get next neighbor
-        next = pairs[prev][0]
-        chain.add(next)
-        print(next)
 
-        if(prev in pairs[next]):
-            pairs[next].remove(prev) #remove the previous value
-            prev = next
-        
     return
-
 
 
 filename = sys.argv[1]
@@ -82,7 +76,6 @@ filename = sys.argv[1]
 if(os.path.isfile(filename)):
     #get closest neighbors
     pairs = get_neighbors(filename)
-    print(pairs)
     #find and print the chain
     print_chain(pairs)
 else:
