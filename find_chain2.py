@@ -31,20 +31,33 @@ def get_neighbors(file):
                 # calculate distance between alpha carbons
                 distance = sqrt(pow((x2 - x1), 2) + pow((y2 - y1), 2) + pow((z2 - z1), 2))
 
-                if(distance < threshold and len(neighbors) < 2):
+                if(distance < threshold and len(neighbors) < 4):
                     neighbors.append(current_j)
 
         closest_pairs[current_i] = neighbors
     return closest_pairs
 
-def print_chain(pairs):
-    length = len(pairs)
 
-    #find the beginning/end of the chain
+def get_start(pairs):
+    start = 1
+
     for pair in pairs:
         if(len(pairs[pair]) == 1):
             start = pair
             break
+    return start
+    
+def dynamic(pairs,prev,next):
+
+
+    return dynamic()
+
+
+def print_chain(pairs):
+    length = len(pairs)
+    chain = []
+    #find the beginning/end of the chain
+    start = get_start(pairs)
  
     prev = start
     print(prev)
@@ -53,11 +66,15 @@ def print_chain(pairs):
     for p in range(1,length):
         #get next neighbor
         next = pairs[prev][0]
+        chain.add(next)
         print(next)
 
-        pairs[next].remove(prev) #remove the previous value
-        prev = next
+        if(prev in pairs[next]):
+            pairs[next].remove(prev) #remove the previous value
+            prev = next
+        
     return
+
 
 
 filename = sys.argv[1]
