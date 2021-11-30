@@ -22,13 +22,13 @@ def get_neighbors(file):
         
         for j,row in data.iterrows():
             current_j = data.iloc[:, 0][j]
-            if current_j != current_i: #skip if the same alpha carbon
+            if current_j != current_i: #skip if the same
                 parsed_row = row[1].split(' ')
                 x2 = float(parsed_row[0])
                 y2 = float(parsed_row[1])
                 z2 = float(parsed_row[2])
 
-                # calculate distance between alpha carbons
+                # calculate distance
                 distance = sqrt(pow((x2 - x1), 2) + pow((y2 - y1), 2) + pow((z2 - z1), 2))
 
                 if(distance < threshold and len(neighbors) < 2):
@@ -65,7 +65,7 @@ filename = sys.argv[1]
 if(os.path.isfile(filename)):
     #get closest neighbors
     pairs = get_neighbors(filename)
-    print(pairs)
+
     #find and print the chain
     print_chain(pairs)
 else:
